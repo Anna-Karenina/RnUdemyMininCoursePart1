@@ -1,10 +1,11 @@
 import React,{useEffect} from 'react'
-import { View, Modal, StyleSheet, TextInput, Button, Alert } from 'react-native'
+import { View, Modal, StyleSheet, TextInput, Alert } from 'react-native'
 import { Theme } from '../Theme'
 import { AppButton } from './UI/AppButton'
 
 export const EditModal = ({ onSave, value, onCancel, visible }) => {
   const [title, setTitle ] = React.useState(value)
+
     const saveHandler = ( ) => {
       if(title.trim().length < 3){
         Alert.alert('Error', `Mininmal title length must be  3 symbols, now ${title.trim().length} symbols`)
@@ -23,8 +24,6 @@ export const EditModal = ({ onSave, value, onCancel, visible }) => {
       animationType = 'slide'
       transparent = { false }
     >
-      {console.log(title)}
-      {console.log(value)}
       <View style = {styled.wrap}>
         <TextInput 
           value = { title }

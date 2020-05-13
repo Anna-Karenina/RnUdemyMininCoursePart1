@@ -3,8 +3,12 @@ import { StyleSheet, View, FlatList, Image, Dimensions } from 'react-native'
 import { Apptodo } from '../Components/Apptodo'
 import { Todo } from './../Components/Todo'
 import { Theme } from '../Theme'
+import { TodoContext } from '../Context/todo/todoContext'
+import { ScreenContext } from '../Context/screen/screenContext'
 
-export const MainScreen = ({ addTodo, todos, removeTodo, openTodo }) =>{
+export const MainScreen = () =>{
+  const {addTodo, todos, removeTodo } = React.useContext(TodoContext)
+  const {changeScreen} = React.useContext(ScreenContext)
   const [deviceWidth, setDeviceWidth] = useState(Dimensions.get('window').width - Theme.PADDING_HORIZONTAL *2)
 
   React.useEffect(()=>{
@@ -24,7 +28,7 @@ export const MainScreen = ({ addTodo, todos, removeTodo, openTodo }) =>{
     renderItem= { 
       ({item}) => (
         <Todo
-          onOpen = { openTodo }
+          onOpen = { changeScreen }
           todo = {item}  
           onRemove = { removeTodo } 
         />) 
@@ -34,7 +38,7 @@ export const MainScreen = ({ addTodo, todos, removeTodo, openTodo }) =>{
     </View>
   )
   if(todos.length === 0){
-    content = 
+    content = (
     <View style = {styled.imageWrap}>
       <Image
         resizeMode = 'contain'
@@ -42,7 +46,7 @@ export const MainScreen = ({ addTodo, todos, removeTodo, openTodo }) =>{
         source = {require('./../../assets/noimage.png')}
       />
     </View>
-  }
+  )}
   return(
     <View>
       <Apptodo onSubmit = { addTodo }/>

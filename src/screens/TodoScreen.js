@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { StyleSheet, View, Dimensions } from 'react-native'
 import { Theme } from '../Theme'
 import { AntDesign, FontAwesome} from '@expo/vector-icons'
@@ -6,12 +6,18 @@ import { AppCard } from '../Components/UI/AppCard'
 import { AppTextBold } from '../Components/UI/AppTextBold'
 import { EditModal } from '../Components/EditModal'
 import { AppButton } from '../Components/UI/AppButton'
+import { TodoContext } from '../Context/todo/todoContext'
+import { ScreenContext } from '../Context/screen/screenContext'
 
-export const TodoScreen = ({onSave, goBack, todo, onRemove}) =>{
+export const TodoScreen = () =>{
+  const { todos, updateTodo, removeTodo} = useContext(TodoContext)
+  const { todoId, changeScreen} = useContext(ScreenContext)
   const [modal, setModal] = React.useState(false)
 
-  const saveHandler = ( title ) =>{
-    onSave(todo.id, title)
+  const todo = todos.find(t => t.id === todoId)
+
+  const saveHandler = title  =>{
+    updateTodo(todo.id, title)
     setModal(false)
   }
   const cancelHendler = () =>{
@@ -23,7 +29,7 @@ export const TodoScreen = ({onSave, goBack, todo, onRemove}) =>{
       <EditModal 
         value = { todo.title }
         visible = { modal } 
-        onCancel = { cancelHendler }
+        onCancel={cancelHendler}
         onSave = { saveHandler }
       />
       <AppCard style = {styled.card}>
@@ -37,7 +43,7 @@ export const TodoScreen = ({onSave, goBack, todo, onRemove}) =>{
         <View style = { styled.buttonWrapper}>
           <AppButton 
           color= { Theme.GREY_COLOR }
-          onPress = {goBack.bind()}
+          onPress = { () => changeScreen(null)}
           >
             <AntDesign name = 'back' size={20} />
           </AppButton>
@@ -45,7 +51,7 @@ export const TodoScreen = ({onSave, goBack, todo, onRemove}) =>{
         <View style = { styled.buttonWrapper}>
           <AppButton 
             color = { Theme.DANGER_COLOR }
-            onPress = { onRemove.bind(null , todo.id)}>
+            onPress = { ()=> removeTodo(todo.id)}>
               <FontAwesome name ="remove" size ={20} color = '#fff'/>
             </AppButton>
         </View>
