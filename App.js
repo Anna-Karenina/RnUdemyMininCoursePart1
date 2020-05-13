@@ -1,17 +1,31 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Navbar } from './src/Navbar';
-import { Apptodo } from './Apptodo';
+import * as Font from 'expo-font'
+import { AppLoading } from 'expo'
+  
+import { MainLayout } from './src/MainLayout';
+import { TodoState } from './src/Context/todo/TodoState';
+
+async function loadAplocation () { 
+  await Font.loadAsync({
+    'roboto-regular' : require('./assets/fonts/Roboto-Regular.ttf'),
+    'roboto-bold' : require('./assets/fonts/Roboto-Bold.ttf')
+  })
+}
 
 export default function App() {
+  const [isReady, setIsReady] = React.useState(false)
+
+  if(!isReady){
+    return <AppLoading 
+    startAsync = {loadAplocation}
+    onError = {err => console.log(err)} 
+    onFinish = {() => setIsReady(true)}/>
+  }
   return (
-    <View style={styles.container}>
-      <Navbar title = 'Todo App'/>
-      <Apptodo />
-    </View>
+    <TodoState>
+      <MainLayout />
+    </TodoState>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {},
-});
+
